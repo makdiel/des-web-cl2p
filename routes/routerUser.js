@@ -1,12 +1,17 @@
 import { Express } from "express";  
 const usuario = Express();
+import { postUsuario, getUsuario, putUsuario, deleteUsuario } from "../controllers/controllerUser"
 
 usuario.use(Express.json());
 
-usuario.post('',(req,res)=>{});
+usuario.post('', postUsuario);
 
-usuario.get('',(req,res)=>{});
+usuario.get('', getUsuario);
 
-usuario.put('/:nombre_usuario',(req,res)=>{});
+usuario.put('/:nombre_usuario', putUsuario);
 
-usuario.delete('/:nombre_usuario',(req,res)=>{});
+usuario.delete('/:nombre_usuario', deleteUsuario);
+
+export {
+    usuario
+}

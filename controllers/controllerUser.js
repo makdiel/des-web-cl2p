@@ -1,59 +1,94 @@
-import {db} from '../db/conn.js';
+import { db } from '../db/conn.js';
 
-const getUsuario = async(req, res)=>{
-
-    const sql = `select * from TBLUsuario`;
-
-    const result = await db.query(sql);
-   
-    res.json(result);
-
+const getUsuario = async (req, res) => {
+    try{
+        const sql = `select * from tbl_usuarios`;
+        const result = await db.query(sql);
+        res.status(200).json(result)
+        //res.json(result);
+    }catch (err){
+        res.status(500).json(err);        
+    }
 }
 
-const postUsuario = async (req, res)=>{
-    const { nombre_categoria } = req.body;
-    const params =  [nombre_categoria];
+const postUsuario = async (req, res) => {
+    try{
+        const { nombre_usuario,
+                correo_electronico,
+                contrasena,
+                nombre,
+                apellido } = req.body;
 
-    const sql = `insert into TBLUsuario 
-    (nombre_categoria)
-    values 
-    ($1) returning *`;
+        const params = [nombre_usuario,
+                        correo_electronico,
+                        contrasena,
+                        nombre,
+                        apellido];
 
-    const result = await db.query(sql, params);
-    res.json(result);
+        const sql = `insert into tbl_usuarios 
+                        (nombre_usuario, 
+                        correo_electronico, 
+                        contrasena,
+                        nombre, 
+                        apellido)
+                        values 
+                        ($1, $2, $3, $4 , $5) returning *`;
 
+        const result = await db.query(sql, params);
+        res.status(200).json(result)
+        //res.json(result);
+    }catch (err){
+        res.status(500).json(err);        
+    }
 }
 
-const putUsuario = async (req, res)=>{
+const putUsuario = async (req, res) => {
+    try{
+        const { correo_electronico,
+                contrasena,
+                nombre,
+                apellido } = req.body;
 
-    const { nombre_categoria  } = req.body;
-    const {id} = req.params;
-    
-    const params =  [nombre_categoria, id];
+        const { nombre_usuario } = req.params;
 
-    const sql = `update TBLUsuario
-    set nombre_categoria = $1   
-    where id = $2
-    returning *`;
+        const params = [nombre_usuario, 
+                        correo_electronico,
+                        contrasena,
+                        nombre,
+                        apellido];
 
-    const result = await db.query(sql, params);
+        const sql = `update tbl_usuarios
+        set correo_electronico = $2,
+        contrasena = $3,
+        nombre = $4 ,
+        apellido = $5   
+        where nombre_usuario = $1
+        returning *`;
 
-    res.json(result);
-
+        const result = await db.query(sql, params);
+        res.status(200).json(result)
+        //res.json(result);
+    }catch (err){
+        res.status(500).json(err);        
+    }
 }
 
-const deleteUsuario = async (req, res)=>{
+const deleteUsuario = async (req, res) => {
+    try{
+        const { nombre_usuario } = req.params;
+        const params = [nombre_usuario];
 
-    const {id} = req.params;
-    const params = [ id];
+        const sql = `delete from tbl_usuarios
+        where nombre_usuario = $1
+        returning *`;
 
-    const sql = `delete from TBLUsuario
-    where id = $2
-    returning *`;
+        const result = await db.query(sql, params);
 
-    const result = await db.query(sql, params);
-
-    res.json(result);
+        res.status(200).json(result)
+        //res.json(result);
+    }catch (err){
+        res.status(500).json(err);        
+    }
 }
 
-export {getUsuario, postUsuario, putUsuario, deleteUsuario}
+export { getUsuario, postUsuario, putUsuario, deleteUsuario }

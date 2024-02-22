@@ -4,11 +4,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 const pgp = pg();
 
-const user=process.env.USER;
-const pass = process.env.PASS;
-const dataBase = process.env.DB;
-const host = process.env.HOST;
-const portDb = process.env.PORT_DB;
+
+const user = process.env._user;
+const pass = process.env._pass;
+const host = process.env._host;
+const database = process.env._bd;
+
+const conectionString = `postgresql://${user}:${pass}@${host}:5432/${database}`;
 
 
 
@@ -16,7 +18,7 @@ const portDb = process.env.PORT_DB;
 //const cnstr = `postgresql://postgres:ServerAcceso.1@localhost:${portDb}/TiendaEnLinea`; 
 const cnstr = `postgresql://postgres:ServerAcceso.1@localhost:5432/tiendaenlinea`; 
 
-const db = pgp(cnstr);
+const db = pgp(conectionString);
 
 db.connect()
     .then( ()=>{
